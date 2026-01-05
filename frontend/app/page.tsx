@@ -6,26 +6,26 @@ export default function Home() {
       <main className="flex min-h-screen w-full max-w-4xl flex-col items-center justify-between px-4 py-16 sm:px-6 lg:px-8">
         <div className="w-full">
           <h1 className="mb-8 text-center text-4xl font-bold text-gray-900 dark:text-zinc-50">
-            Ecommerce Store
+            Цахим дэлгүүр
           </h1>
           <p className="mb-12 text-center text-lg text-gray-600 dark:text-zinc-400">
-            Welcome to our online shop
+            Манай онлайн дэлгүүрт тавтай морил
           </p>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div className="overflow-hidden rounded-lg bg-white shadow transition-shadow hover:shadow-lg dark:bg-gray-800">
               <div className="p-6">
                 <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-zinc-50">
-                  Products
+                  Бараа
                 </h2>
                 <p className="mb-4 text-sm text-gray-500 dark:text-zinc-400">
-                  Browse our collection
+                  Манай цуглуулгыг үзэх
                 </p>
                 <Link
                   href="/products"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  View Products →
+                  Бараа үзэх →
                 </Link>
               </div>
             </div>
@@ -33,16 +33,16 @@ export default function Home() {
             <div className="overflow-hidden rounded-lg bg-white shadow transition-shadow hover:shadow-lg dark:bg-gray-800">
               <div className="p-6">
                 <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-zinc-50">
-                  Cart
+                  Сагс
                 </h2>
                 <p className="mb-4 text-sm text-gray-500 dark:text-zinc-400">
-                  Your shopping cart
+                  Таны дэлгүүрийн сагс
                 </p>
                 <Link
                   href="/cart"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  View Cart →
+                  Сагс үзэх →
                 </Link>
               </div>
             </div>
@@ -50,16 +50,16 @@ export default function Home() {
             <div className="overflow-hidden rounded-lg bg-white shadow transition-shadow hover:shadow-lg dark:bg-gray-800">
               <div className="p-6">
                 <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-zinc-50">
-                  Orders
+                  Захиалга
                 </h2>
                 <p className="mb-4 text-sm text-gray-500 dark:text-zinc-400">
-                  Your order history
+                  Таны захиалгын түүх
                 </p>
                 <Link
                   href="/orders"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  View Orders →
+                  Захиалга үзэх →
                 </Link>
               </div>
             </div>
@@ -70,7 +70,7 @@ export default function Home() {
               href="/admin"
               className="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200"
             >
-              Admin Panel →
+              Админ панел →
             </Link>
           </div>
         </div>
