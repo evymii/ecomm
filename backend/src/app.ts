@@ -6,6 +6,9 @@ import express, {
 } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth";
+import userRoutes from "./routes/user";
+import adminRoutes from "./routes/admin";
 
 dotenv.config();
 
@@ -26,8 +29,10 @@ app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "ok", message: "Server is running" });
 });
 
-// API routes will be added here
-// app.use('/api', routes);
+// API routes
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {
