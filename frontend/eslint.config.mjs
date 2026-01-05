@@ -13,6 +13,17 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Prevent JSX files - only TSX allowed
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: ["**/*.js", "**/*.jsx"],
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;
