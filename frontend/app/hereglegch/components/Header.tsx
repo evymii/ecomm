@@ -18,14 +18,14 @@ export default function Header() {
   };
 
   return (
-    <header className="border-b border-gray-200 bg-white shadow-sm">
+    <header className="border-b border-black/40 bg-[#F3F4F4] shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between relative">
           {/* Logo on the left */}
           <div className="flex items-center">
-            <Link href="/hereglegch/home" className="flex items-center">
-              <span className="text-2xl font-bold text-[#5D688A]">
-                ECOMM
+            <Link href="/hereglegch/home" className="flex items-center group">
+              <span className="text-2xl font-bold text-black transition-all duration-500 ease-out group-hover:opacity-80">
+                AzSouviner
               </span>
             </Link>
           </div>
@@ -34,28 +34,28 @@ export default function Header() {
           <nav className="flex items-center space-x-8">
             <Link
               href="/hereglegch/home"
-              className={`group relative inline-flex items-center px-1 text-sm font-medium transition-colors ${
+              className={`group relative inline-flex items-center px-1 text-sm font-medium transition-all duration-500 ease-out ${
                 isActive("/hereglegch/home")
-                  ? "text-[#5D688A]"
-                  : "text-gray-600 hover:text-[#5D688A]"
+                  ? "text-black"
+                  : "text-black/70 hover:text-black"
               }`}
             >
               <span className="relative z-10">Нүүр</span>
               <span
-                className="absolute -bottom-px left-0 h-0.5 w-0 bg-[#5D688A] transition-all duration-300 ease-out group-hover:w-full"
+                className="absolute -bottom-px left-0 h-0.5 w-0 bg-black transition-all duration-500 ease-out group-hover:w-full"
               />
             </Link>
             <Link
               href="/hereglegch/products"
-              className={`group relative inline-flex items-center px-1 text-sm font-medium transition-colors ${
+              className={`group relative inline-flex items-center px-1 text-sm font-medium transition-all duration-500 ease-out ${
                 isActive("/hereglegch/products")
-                  ? "text-[#5D688A]"
-                  : "text-gray-600 hover:text-[#5D688A]"
+                  ? "text-black"
+                  : "text-black/70 hover:text-black"
               }`}
             >
               <span className="relative z-10">Бараа</span>
               <span
-                className="absolute -bottom-px left-0 h-0.5 w-0 bg-[#5D688A] transition-all duration-300 ease-out group-hover:w-full"
+                className="absolute -bottom-px left-0 h-0.5 w-0 bg-black transition-all duration-500 ease-out group-hover:w-full"
               />
             </Link>
           </nav>
@@ -64,29 +64,29 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <Link
               href="/hereglegch/search"
-              className="p-2 text-gray-600 transition-all duration-300 ease-out hover:text-[#5D688A]/60"
+              className="p-2 text-black/70 transition-all duration-500 ease-out hover:text-black hover:bg-[#E0E0E0] rounded-lg"
               aria-label="Search"
             >
-              <Search className="h-6 w-6 transition-all duration-300 hover:scale-110 hover:opacity-80" />
+              <Search className="h-6 w-6" />
             </Link>
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2 text-gray-600 transition-all duration-300 ease-out hover:text-[#5D688A]/60"
+              className="relative p-2 text-black/70 transition-all duration-500 ease-out hover:text-black hover:bg-[#E8E8D3]/50 rounded-lg"
               aria-label="Shopping Cart"
             >
-              <ShoppingCart className="h-6 w-6 transition-all duration-300 hover:scale-110 hover:opacity-80" />
+              <ShoppingCart className="h-6 w-6" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {cartItemCount > 99 ? "99+" : cartItemCount}
                 </span>
               )}
             </button>
             <Link
               href="/hereglegch/profile"
-              className="p-2 text-gray-600 transition-all duration-300 ease-out hover:text-[#5D688A]/60"
+              className="p-2 text-black/70 transition-all duration-500 ease-out hover:text-black hover:bg-[#E0E0E0] rounded-lg"
               aria-label="User Profile"
             >
-              <User className="h-6 w-6 transition-all duration-300 hover:scale-110 hover:opacity-80" />
+              <User className="h-6 w-6" />
             </Link>
           </div>
         </div>

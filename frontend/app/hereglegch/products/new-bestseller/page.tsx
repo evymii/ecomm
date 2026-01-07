@@ -118,17 +118,17 @@ export default function NewBestsellerPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-black">
           Шинэ / Онцлох бараа
         </h1>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-black/70">
           Манай дэлгүүрийн шинэ болон онцлох бараанууд
         </p>
       </div>
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-500">Уншиж байна...</p>
+          <p className="text-black/50">Уншиж байна...</p>
         </div>
       ) : products.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -138,7 +138,7 @@ export default function NewBestsellerPage() {
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-gray-500">Бараа олдсонгүй</p>
+          <p className="text-black/50">Бараа олдсонгүй</p>
         </div>
       )}
     </div>

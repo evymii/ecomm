@@ -8,7 +8,7 @@ export default function HereglegchLayout({
 }>) {
   return (
     <CartProvider>
-      <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+      <div className="min-h-screen bg-[#F3F4F4] overflow-x-hidden">
         <Header />
         <main>{children}</main>
       </div>

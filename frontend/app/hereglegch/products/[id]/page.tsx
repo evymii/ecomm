@@ -160,7 +160,7 @@ export default function ProductDetailPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="text-center py-12">
-          <p className="text-gray-500">Уншиж байна...</p>
+          <p className="text-black/50">Уншиж байна...</p>
         </div>
       </div>
     );
@@ -170,10 +170,10 @@ export default function ProductDetailPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">Бараа олдсонгүй</p>
+          <p className="text-black/50 mb-4">Бараа олдсонгүй</p>
           <Link
             href="/hereglegch/home"
-            className="inline-flex items-center gap-2 text-[#5D688A] hover:text-[#5D688A]/80"
+            className="inline-flex items-center gap-2 text-black/70 hover:text-black transition-all duration-500 ease-out"
           >
             <ArrowLeft className="h-4 w-4" />
             Буцах
@@ -187,7 +187,7 @@ export default function ProductDetailPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Link
         href="/hereglegch/home"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+        className="inline-flex items-center gap-2 text-black/70 hover:text-black mb-6 transition-all duration-500 ease-out"
       >
         <ArrowLeft className="h-5 w-5" />
         Буцах
@@ -195,39 +195,39 @@ export default function ProductDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Product Image Placeholder */}
-        <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-          <div className="h-full w-full bg-gray-100"></div>
+        <div className="aspect-square overflow-hidden rounded-lg bg-[#F3F4F4] border border-black/40">
+          <div className="h-full w-full bg-[#F3F4F4]"></div>
         </div>
 
         {/* Product Info */}
         <div className="flex flex-col">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-black mb-4">
             {product.name}
           </h1>
 
-          <p className="text-3xl font-bold text-[#5D688A] mb-6">
+          <p className="text-3xl font-bold text-black mb-6">
             ₮{product.price.toLocaleString()}
           </p>
 
           {/* Quantity Controls */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-black/70 mb-2">
               Тоо ширхэг
             </label>
-            <div className="flex items-center gap-2 border border-gray-300 rounded-lg w-fit">
+            <div className="flex items-stretch gap-0 border border-black/50 rounded-lg w-fit overflow-hidden">
               <button
                 onClick={handleDecrease}
-                className="p-3 hover:bg-gray-100 transition-colors rounded-l-lg"
+                className="p-3 hover:bg-[#E0E0E0] transition-all duration-500 ease-out border-r border-black/50"
                 aria-label="Decrease quantity"
               >
                 <Minus className="h-5 w-5" />
               </button>
-              <span className="px-6 py-3 min-w-[4rem] text-center font-medium text-lg">
+              <span className="px-6 py-3 min-w-[4rem] text-center font-medium text-lg bg-[#F3F4F4] border-r border-black/50">
                 {quantity}
               </span>
               <button
                 onClick={handleIncrease}
-                className="p-3 hover:bg-gray-100 transition-colors rounded-r-lg"
+                className="p-3 hover:bg-[#E0E0E0] transition-all duration-500 ease-out"
                 aria-label="Increase quantity"
               >
                 <Plus className="h-5 w-5" />
@@ -238,19 +238,19 @@ export default function ProductDetailPage() {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="w-full flex items-center justify-center gap-2 bg-[#5D688A] text-white py-4 px-6 rounded-lg hover:bg-[#5D688A]/90 transition-colors font-medium text-lg"
+            className="w-full flex items-center justify-center gap-2 bg-black text-white py-4 px-6 rounded-lg hover:bg-black/80 transition-all duration-500 ease-out font-medium text-lg"
           >
             <ShoppingCart className="h-5 w-5" />
             Сагсанд нэмэх
           </button>
 
           {/* Total Price */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+          <div className="mt-6 p-4 bg-[#F3F4F4] rounded-lg border border-black/40">
             <div className="flex justify-between items-center">
-              <span className="text-lg font-medium text-gray-700">
+              <span className="text-lg font-medium text-black/70">
                 Нийт дүн:
               </span>
-              <span className="text-2xl font-bold text-[#5D688A]">
+              <span className="text-2xl font-bold text-black">
                 ₮{(product.price * quantity).toLocaleString()}
               </span>
             </div>
