@@ -58,7 +58,6 @@ export default function ProductCarousel({
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollContainerRef.current && products.length > 0 && cardWidth > 0) {
-      const container = scrollContainerRef.current;
       const gap = 24;
       const scrollPosition = products.length * (cardWidth + gap);
       // Use setTimeout to ensure DOM is ready
@@ -146,16 +145,16 @@ export default function ProductCarousel({
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {icon && <span className="text-2xl">{icon}</span>}
-            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            <h2 className="text-2xl font-bold text-black">{title}</h2>
           </div>
           <Link
             href={viewMoreLink}
-            className="inline-flex items-center text-sm font-medium text-[#5D688A] hover:text-[#5D688A]/80 transition-colors whitespace-nowrap"
+            className="inline-flex items-center text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
           >
             Цааш үзэх →
           </Link>
         </div>
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-black/50">
           Бараа олдсонгүй
         </div>
       </div>
@@ -167,11 +166,11 @@ export default function ProductCarousel({
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {icon && <span className="text-2xl">{icon}</span>}
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          <h2 className="text-2xl font-bold text-black">{title}</h2>
         </div>
         <Link
           href={viewMoreLink}
-          className="inline-flex items-center text-sm font-medium text-[#5D688A] hover:text-[#5D688A]/80 transition-colors whitespace-nowrap"
+          className="inline-flex items-center text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
         >
           Цааш үзэх →
         </Link>
@@ -183,10 +182,10 @@ export default function ProductCarousel({
         {products.length > itemsPerSlide && (
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-2 transition-all duration-500 ease-out hover:scale-110"
             aria-label="Previous products"
           >
-            <ChevronLeft className="h-6 w-6 text-gray-700" />
+            <ChevronLeft className="h-6 w-6 text-black" />
           </button>
         )}
 
@@ -217,10 +216,10 @@ export default function ProductCarousel({
         {products.length > itemsPerSlide && (
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all hover:scale-110"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-2 transition-all duration-500 ease-out hover:scale-110"
             aria-label="Next products"
           >
-            <ChevronRight className="h-6 w-6 text-gray-700" />
+            <ChevronRight className="h-6 w-6 text-black" />
           </button>
         )}
       </div>
