@@ -69,169 +69,106 @@ export default function HomePage() {
           const data = await response.json();
           const products: Product[] = data.products || [];
           
-          // Filter new/bestseller products (get all for carousel)
+          // Filter new/bestseller products
           const newBestseller = products.filter((p) => p.isNew || p.isBestseller);
           setNewProducts(newBestseller);
           
-          // Filter sale products (get all for carousel)
+          // Filter sale products
           const onSale = products.filter((p) => p.isOnSale);
           setSaleProducts(onSale);
         } else {
-          // Mock data for development - more products for carousel
+          // Mock data for development - New/Bestseller products
           setNewProducts([
             {
               id: "1",
               name: "Шинэ бараа 1",
               price: 50000,
-              description: "Шинэ барааны тайлбар",
             },
             {
               id: "2",
               name: "Шинэ бараа 2",
               price: 75000,
-              description: "Шинэ барааны тайлбар",
             },
             {
               id: "3",
               name: "Шинэ бараа 3",
               price: 60000,
-              description: "Шинэ барааны тайлбар",
             },
             {
               id: "4",
               name: "Шинэ бараа 4",
               price: 80000,
-              description: "Шинэ барааны тайлбар",
             },
             {
               id: "5",
               name: "Шинэ бараа 5",
               price: 55000,
-              description: "Шинэ барааны тайлбар",
             },
             {
               id: "6",
               name: "Шинэ бараа 6",
               price: 65000,
-              description: "Шинэ барааны тайлбар",
             },
+          ]);
+          // Mock data for development - For Sale products
+          setSaleProducts([
             {
               id: "7",
-              name: "Шинэ бараа 7",
-              price: 70000,
-              description: "Шинэ барааны тайлбар",
+              name: "Хямдарсан бараа 1",
+              price: 40000,
             },
             {
               id: "8",
-              name: "Шинэ бараа 8",
-              price: 90000,
-              description: "Шинэ барааны тайлбар",
+              name: "Хямдарсан бараа 2",
+              price: 55000,
             },
-          ]);
-          setSaleProducts([
             {
               id: "9",
-              name: "Хямдарсан бараа 1",
-              price: 40000,
-              description: "Хямдарсан барааны тайлбар",
+              name: "Хямдарсан бараа 3",
+              price: 45000,
             },
             {
               id: "10",
-              name: "Хямдарсан бараа 2",
-              price: 55000,
-              description: "Хямдарсан барааны тайлбар",
+              name: "Хямдарсан бараа 4",
+              price: 70000,
             },
             {
               id: "11",
-              name: "Хямдарсан бараа 3",
-              price: 45000,
-              description: "Хямдарсан барааны тайлбар",
+              name: "Хямдарсан бараа 5",
+              price: 35000,
             },
             {
               id: "12",
-              name: "Хямдарсан бараа 4",
-              price: 70000,
-              description: "Хямдарсан барааны тайлбар",
-            },
-            {
-              id: "13",
-              name: "Хямдарсан бараа 5",
-              price: 35000,
-              description: "Хямдарсан барааны тайлбар",
-            },
-            {
-              id: "14",
               name: "Хямдарсан бараа 6",
               price: 60000,
-              description: "Хямдарсан барааны тайлбар",
-            },
-            {
-              id: "15",
-              name: "Хямдарсан бараа 7",
-              price: 48000,
-              description: "Хямдарсан барааны тайлбар",
-            },
-            {
-              id: "16",
-              name: "Хямдарсан бараа 8",
-              price: 75000,
-              description: "Хямдарсан барааны тайлбар",
             },
           ]);
         }
       } catch (error) {
         console.error("Error fetching products:", error);
-        // Mock data fallback - more products for carousel
+        // Mock data fallback
         setNewProducts([
           {
             id: "1",
             name: "Шинэ бараа 1",
             price: 50000,
-            description: "Шинэ барааны тайлбар",
           },
           {
             id: "2",
             name: "Шинэ бараа 2",
             price: 75000,
-            description: "Шинэ барааны тайлбар",
-          },
-          {
-            id: "3",
-            name: "Шинэ бараа 3",
-            price: 60000,
-            description: "Шинэ барааны тайлбар",
-          },
-          {
-            id: "4",
-            name: "Шинэ бараа 4",
-            price: 80000,
-            description: "Шинэ барааны тайлбар",
           },
         ]);
         setSaleProducts([
           {
-            id: "5",
+            id: "3",
             name: "Хямдарсан бараа 1",
             price: 40000,
-            description: "Хямдарсан барааны тайлбар",
           },
           {
-            id: "6",
+            id: "4",
             name: "Хямдарсан бараа 2",
             price: 55000,
-            description: "Хямдарсан барааны тайлбар",
-          },
-          {
-            id: "7",
-            name: "Хямдарсан бараа 3",
-            price: 45000,
-            description: "Хямдарсан барааны тайлбар",
-          },
-          {
-            id: "8",
-            name: "Хямдарсан бараа 4",
-            price: 70000,
-            description: "Хямдарсан барааны тайлбар",
           },
         ]);
       } finally {

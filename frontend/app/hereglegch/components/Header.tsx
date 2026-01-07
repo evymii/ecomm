@@ -1,11 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, ShoppingCart, User } from "lucide-react";
+import { useCart } from "../contexts/CartContext";
+import CartSidebar from "./CartSidebar";
 
 export default function Header() {
   const pathname = usePathname();
+  const { getTotalItems } = useCart();
+  const cartItemCount = getTotalItems();
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -62,33 +68,40 @@ export default function Header() {
               aria-label="Search"
             >
               <Search className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-80" />
-              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100]">
+              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100] max-w-[200px] truncate">
                 Хайх
                 <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
                   <span className="block h-2 w-2 rotate-45 bg-gray-900" />
                 </span>
               </span>
             </Link>
-            <Link
-              href="/hereglegch/cart"
+            <button
+              onClick={() => setIsCartOpen(true)}
               className="group relative p-2 text-gray-600 transition-all duration-300 ease-out hover:text-[#5D688A]/60"
               aria-label="Shopping Cart"
             >
-              <ShoppingCart className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-80" />
-              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100]">
+              <div className="relative">
+                <ShoppingCart className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-80" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount > 99 ? "99+" : cartItemCount}
+                  </span>
+                )}
+              </div>
+              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100] max-w-[200px] truncate">
                 Сагс
                 <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
                   <span className="block h-2 w-2 rotate-45 bg-gray-900" />
                 </span>
               </span>
-            </Link>
+            </button>
             <Link
               href="/hereglegch/profile"
               className="group relative p-2 text-gray-600 transition-all duration-300 ease-out hover:text-[#5D688A]/60"
               aria-label="User Profile"
             >
               <User className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-80" />
-              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100]">
+              <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-300 ease-out group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none z-[100] max-w-[200px] truncate">
                 Профайл
                 <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
                   <span className="block h-2 w-2 rotate-45 bg-gray-900" />
@@ -98,6 +111,7 @@ export default function Header() {
           </div>
         </div>
       </div>
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 }
