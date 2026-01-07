@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Product {
   id: string;
@@ -17,6 +18,7 @@ interface ProductCarouselProps {
   products: Product[];
   viewMoreLink: string;
   itemsPerSlide?: number;
+  icon?: React.ReactNode;
 }
 
 export default function ProductCarousel({
@@ -24,39 +26,133 @@ export default function ProductCarousel({
   products,
   viewMoreLink,
   itemsPerSlide = 4,
+  icon,
 }: ProductCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [cardWidth, setCardWidth] = useState(0);
 
-  // Calculate how many slides we need
-  const totalSlides = Math.ceil(products.length / itemsPerSlide);
-  
-  // Get products for current slide
-  const getCurrentSlideProducts = () => {
-    const start = currentIndex * itemsPerSlide;
-    return products.slice(start, start + itemsPerSlide);
+  // Create infinite loop by duplicating products (3 sets for smooth looping)
+  const duplicatedProducts = [...products, ...products, ...products];
+
+  // Calculate card width based on container
+  useEffect(() => {
+    const updateCardWidth = () => {
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const gap = 24; // gap-6 = 1.5rem = 24px
+        const width = (container.offsetWidth - (itemsPerSlide - 1) * gap) / itemsPerSlide;
+        setCardWidth(width);
+      }
+    };
+
+    updateCardWidth();
+    const timeoutId = setTimeout(updateCardWidth, 100); // Delay to ensure container is rendered
+    window.addEventListener("resize", updateCardWidth);
+    return () => {
+      window.removeEventListener("resize", updateCardWidth);
+      clearTimeout(timeoutId);
+    };
+  }, [itemsPerSlide, products.length]);
+
+  // Initialize scroll position to middle set
+  useEffect(() => {
+    if (scrollContainerRef.current && products.length > 0 && cardWidth > 0) {
+      const container = scrollContainerRef.current;
+      const gap = 24;
+      const scrollPosition = products.length * (cardWidth + gap);
+      // Use setTimeout to ensure DOM is ready
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollLeft = scrollPosition;
+        }
+      }, 100);
+    }
+  }, [products.length, cardWidth]);
+
+  // Handle scroll to create infinite loop
+  const handleScroll = () => {
+    if (!scrollContainerRef.current || !isAutoScrolling || cardWidth === 0) return;
+    
+    const container = scrollContainerRef.current;
+    const gap = 24;
+    const singleSetWidth = products.length * (cardWidth + gap);
+    const scrollLeft = container.scrollLeft;
+
+    // If scrolled past the second set, jump back to middle
+    if (scrollLeft >= singleSetWidth * 2) {
+      container.scrollLeft = singleSetWidth;
+    }
+    // If scrolled before the first set, jump to middle
+    else if (scrollLeft < singleSetWidth - 10) {
+      container.scrollLeft = singleSetWidth;
+    }
   };
 
-  // Auto-rotate carousel
+  // Auto-scroll for circular motion
   useEffect(() => {
-    if (totalSlides <= 1) return;
+    if (!isAutoScrolling || products.length === 0 || cardWidth === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % totalSlides);
-    }, 4000); // Change slide every 4 seconds
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const gap = 24;
+        const scrollAmount = cardWidth + gap;
+        container.scrollBy({
+          left: scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    }, 3000); // Scroll every 3 seconds
 
     return () => clearInterval(interval);
-  }, [totalSlides]);
+  }, [products.length, cardWidth, isAutoScrolling]);
+
+  const handlePrev = () => {
+    if (!scrollContainerRef.current || cardWidth === 0) return;
+    setIsAutoScrolling(false);
+    
+    const container = scrollContainerRef.current;
+    const gap = 24;
+    const scrollAmount = cardWidth + gap;
+    
+    container.scrollBy({
+      left: -scrollAmount,
+      behavior: "smooth",
+    });
+    
+    setTimeout(() => setIsAutoScrolling(true), 5000);
+  };
+
+  const handleNext = () => {
+    if (!scrollContainerRef.current || cardWidth === 0) return;
+    setIsAutoScrolling(false);
+    
+    const container = scrollContainerRef.current;
+    const gap = 24;
+    const scrollAmount = cardWidth + gap;
+    
+    container.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
+    
+    setTimeout(() => setIsAutoScrolling(true), 5000);
+  };
 
   if (products.length === 0) {
     return (
       <div className="mb-12">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          <div className="flex items-center gap-2">
+            {icon && <span className="text-2xl">{icon}</span>}
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          </div>
           <Link
             href={viewMoreLink}
             className="inline-flex items-center text-sm font-medium text-[#5D688A] hover:text-[#5D688A]/80 transition-colors whitespace-nowrap"
           >
-            Дэлгэрэнгүй үзэх →
+            Цааш үзэх →
           </Link>
         </div>
         <div className="text-center py-8 text-gray-500">
@@ -69,61 +165,71 @@ export default function ProductCarousel({
   return (
     <div className="mb-12">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <div className="flex items-center gap-2">
+          {icon && <span className="text-2xl">{icon}</span>}
+          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        </div>
         <Link
           href={viewMoreLink}
           className="inline-flex items-center text-sm font-medium text-[#5D688A] hover:text-[#5D688A]/80 transition-colors whitespace-nowrap"
         >
-          Дэлгэрэнгүй үзэх →
+          Цааш үзэх →
         </Link>
       </div>
 
       {/* Carousel Container */}
       <div className="relative">
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateX(-${currentIndex * 100}%)`,
-            }}
+        {/* Left Navigation Button */}
+        {products.length > itemsPerSlide && (
+          <button
+            onClick={handlePrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all hover:scale-110"
+            aria-label="Previous products"
           >
-            {Array.from({ length: totalSlides }).map((_, slideIndex) => {
-              const slideProducts = products.slice(
-                slideIndex * itemsPerSlide,
-                slideIndex * itemsPerSlide + itemsPerSlide
-              );
-              return (
-                <div
-                  key={slideIndex}
-                  className="min-w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
-                >
-                  {slideProducts.map((product) => (
-                    <ProductCard key={product.id} {...product} />
-                  ))}
-                </div>
-              );
-            })}
+            <ChevronLeft className="h-6 w-6 text-gray-700" />
+          </button>
+        )}
+
+        {/* Scrollable Container */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="overflow-x-hidden scrollbar-hide"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          <div className="flex gap-6" style={{ width: "max-content" }}>
+            {duplicatedProducts.map((product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="flex-shrink-0"
+                style={{ width: cardWidth > 0 ? `${cardWidth}px` : "300px" }}
+              >
+                <ProductCard {...product} />
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Indicator Dots */}
-        {totalSlides > 1 && (
-          <div className="flex justify-center gap-2 mt-6">
-            {Array.from({ length: totalSlides }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "w-8 bg-[#5D688A]"
-                    : "w-2 bg-gray-300 hover:bg-gray-400"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+        {/* Right Navigation Button */}
+        {products.length > itemsPerSlide && (
+          <button
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all hover:scale-110"
+            aria-label="Next products"
+          >
+            <ChevronRight className="h-6 w-6 text-gray-700" />
+          </button>
         )}
       </div>
+
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }

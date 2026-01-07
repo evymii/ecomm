@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import { CartProvider } from "./contexts/CartContext";
 
 export default function HereglegchLayout({
   children,
@@ -6,10 +7,12 @@ export default function HereglegchLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      <Header />
-      <main>{children}</main>
-    </div>
+    <CartProvider>
+      <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+        <Header />
+        <main>{children}</main>
+      </div>
+    </CartProvider>
   );
 }
 
