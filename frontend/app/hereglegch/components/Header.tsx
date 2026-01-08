@@ -1,17 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, ShoppingCart, User } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import CartSidebar from "./CartSidebar";
+import ProfileModal from "./ProfileModal";
+import ProfileMenu from "./ProfileMenu";
 
 export default function Header() {
   const pathname = usePathname();
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+      setIsLoggedIn(!!(token || user));
+    }
+  }, []);
+
+  // Listen for storage changes (when user logs in/out)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        setIsLoggedIn(!!(token || user));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    // Also check on focus in case of same-tab logout
+    window.addEventListener("focus", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("focus", handleStorageChange);
+    };
+  }, []);
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -81,17 +113,30 @@ export default function Header() {
                 </span>
               )}
             </button>
-            <Link
-              href="/hereglegch/profile"
+            <button
+              onClick={() => {
+                // Check login status when clicking profile icon
+                if (typeof window !== "undefined") {
+                  const token = localStorage.getItem("token");
+                  const user = localStorage.getItem("user");
+                  setIsLoggedIn(!!(token || user));
+                }
+                setIsProfileOpen(true);
+              }}
               className="p-2 text-black/70 transition-all duration-500 ease-out hover:text-black hover:bg-[#E0E0E0] rounded-lg"
               aria-label="User Profile"
             >
               <User className="h-6 w-6" />
-            </Link>
+            </button>
           </div>
         </div>
       </div>
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      {isLoggedIn ? (
+        <ProfileMenu isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      ) : (
+        <ProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      )}
     </header>
   );
 }

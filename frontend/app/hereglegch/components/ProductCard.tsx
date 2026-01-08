@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../contexts/CartContext";
-import { Plus, Minus, ShoppingCart } from "lucide-react";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { Plus, Minus, ShoppingCart, Heart } from "lucide-react";
 
 interface ProductCardProps {
   id: string;
@@ -22,7 +23,9 @@ export default function ProductCard({
 }: ProductCardProps) {
   const router = useRouter();
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [quantity, setQuantity] = useState(1);
+  const favorite = isFavorite(id);
 
   const handleDecrease = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,6 +56,11 @@ export default function ProductCard({
     router.push(`/hereglegch/products/${id}`);
   };
 
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite({ id, name, price, image, description });
+  };
+
   return (
     <div
       onClick={handleCardClick}
@@ -61,6 +69,20 @@ export default function ProductCard({
       {/* Image placeholder space */}
       <div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden bg-[#F3F4F4]">
         <div className="h-40 sm:h-52 lg:h-64 w-full bg-[#F3F4F4] group-hover:bg-[#E0E0E0] transition-colors duration-500"></div>
+        {/* Heart Icon */}
+        <button
+          onClick={handleFavoriteClick}
+          className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-full transition-all duration-500 ease-out z-10"
+          aria-label={favorite ? "Зүрхэлсэнээс хасах" : "Зүрхэлсэнд нэмэх"}
+        >
+          <Heart
+            className={`h-5 w-5 transition-all duration-500 ease-out ${
+              favorite
+                ? "fill-red-500 text-red-500"
+                : "text-black/50 hover:text-red-500"
+            }`}
+          />
+        </button>
       </div>
       <div className="p-3 sm:p-4">
         <h3 className="text-base sm:text-lg font-medium text-black line-clamp-2 mb-2 text-center">
