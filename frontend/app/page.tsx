@@ -22,7 +22,7 @@ export default function Home() {
                   Манай цуглуулгыг үзэх
                 </p>
                 <Link
-                  href="/products"
+                  href="/hereglegch/products"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Бараа үзэх →
@@ -39,7 +39,7 @@ export default function Home() {
                   Таны дэлгүүрийн сагс
                 </p>
                 <Link
-                  href="/cart"
+                  href="/hereglegch/cart"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Сагс үзэх →
@@ -56,7 +56,7 @@ export default function Home() {
                   Таны захиалгын түүх
                 </p>
                 <Link
-                  href="/orders"
+                  href="/hereglegch/orders"
                   className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Захиалга үзэх →
