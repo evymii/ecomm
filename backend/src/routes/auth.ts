@@ -129,5 +129,53 @@ router.get("/me", authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Update current user profile
+router.put("/me", authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: "Authentication required" });
+      return;
+    }
+
+    const { name, email } = req.body;
+    const user = await User.findById(req.user.userId);
+    
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    // Check if email is being changed and if it's already taken
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        res.status(400).json({ error: "Email already exists" });
+        return;
+      }
+      user.email = email;
+    }
+
+    // Update name if provided
+    if (name) {
+      user.name = name;
+    }
+
+    await user.save();
+
+    res.json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Update user error:", error);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
 export default router;
 
