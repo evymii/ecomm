@@ -60,35 +60,35 @@ export default function ProductCard({
     >
       {/* Image placeholder space */}
       <div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden bg-[#F3F4F4]">
-        <div className="h-64 w-full bg-[#F3F4F4] group-hover:bg-[#E0E0E0] transition-colors duration-500"></div>
+        <div className="h-40 sm:h-52 lg:h-64 w-full bg-[#F3F4F4] group-hover:bg-[#E0E0E0] transition-colors duration-500"></div>
       </div>
-      <div className="p-4">
-        <h3 className="text-lg font-medium text-black line-clamp-2 mb-2 text-center">
+      <div className="p-3 sm:p-4">
+        <h3 className="text-base sm:text-lg font-medium text-black line-clamp-2 mb-2 text-center">
           {name}
         </h3>
-        <p className="text-xl font-semibold text-black mb-4 text-center">
+        <p className="text-lg sm:text-xl font-semibold text-black mb-3 sm:mb-4 text-center">
           ₮{price.toLocaleString()}
         </p>
 
         {/* Quantity Controls */}
-        <div className="flex items-center justify-center mb-3">
+        <div className="flex items-center justify-center mb-2 sm:mb-3">
           <div className="flex items-stretch gap-0 border border-black/50 rounded-lg overflow-hidden">
             <button
               onClick={handleDecrease}
-              className="p-2 hover:bg-[#E0E0E0] transition-all duration-500 ease-out border-r border-black/50"
+              className="p-1.5 sm:p-2 hover:bg-[#E0E0E0] transition-all duration-500 ease-out border-r border-black/50"
               aria-label="Decrease quantity"
             >
-              <Minus className="h-4 w-4" />
+              <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
-            <span className="px-4 py-2 min-w-[3rem] text-center font-medium bg-[#F3F4F4] border-r border-black/50">
+            <span className="px-3 sm:px-4 py-1.5 sm:py-2 min-w-[2.5rem] sm:min-w-[3rem] text-sm sm:text-base text-center font-medium bg-[#F3F4F4] border-r border-black/50">
               {quantity}
             </span>
             <button
               onClick={handleIncrease}
-              className="p-2 hover:bg-[#E0E0E0] transition-all duration-500 ease-out"
+              className="p-1.5 sm:p-2 hover:bg-[#E0E0E0] transition-all duration-500 ease-out"
               aria-label="Increase quantity"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
           </div>
         </div>
@@ -96,9 +96,9 @@ export default function ProductCard({
         {/* Add to Cart Button */}
         <button
           onClick={handleAddToCart}
-          className="w-full flex items-center justify-center gap-2 bg-black text-white py-2 px-4 rounded-lg hover:bg-black/80 transition-all duration-500 ease-out font-medium"
+          className="w-full flex items-center justify-center gap-2 bg-black text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-black/80 transition-all duration-500 ease-out font-medium text-sm sm:text-base"
         >
-          <ShoppingCart className="h-4 w-4" />
+          <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
           Сагсанд нэмэх
         </button>
       </div>

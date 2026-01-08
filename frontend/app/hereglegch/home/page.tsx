@@ -181,18 +181,18 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8 lg:py-8">
       {/* Greeting */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-black text-center">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black text-center px-2">
           Сайн байна уу, {userName}!
         </h1>
       </div>
 
       {/* Loading state */}
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-black/50">Уншиж байна...</p>
+        <div className="text-center py-8 sm:py-12">
+          <p className="text-sm sm:text-base text-black/50">Уншиж байна...</p>
         </div>
       ) : (
         <>
@@ -201,7 +201,6 @@ export default function HomePage() {
             title="Шинэ / Онцлох бараа"
             products={newProducts}
             viewMoreLink="/hereglegch/products/new-bestseller"
-            itemsPerSlide={4}
           />
 
           {/* For Sale Products Carousel */}
@@ -209,7 +208,6 @@ export default function HomePage() {
             title="Хямдарсан бараа"
             products={saleProducts}
             viewMoreLink="/hereglegch/products/for-sale"
-            itemsPerSlide={4}
           />
         </>
       )}

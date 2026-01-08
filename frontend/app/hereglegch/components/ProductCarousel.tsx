@@ -25,40 +25,72 @@ export default function ProductCarousel({
   title,
   products,
   viewMoreLink,
-  itemsPerSlide = 4,
+  itemsPerSlide,
   icon,
 }: ProductCarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [cardWidth, setCardWidth] = useState(0);
+  const [responsiveItemsPerSlide, setResponsiveItemsPerSlide] = useState(4);
 
   // Create infinite loop by duplicating products (3 sets for smooth looping)
   const duplicatedProducts = [...products, ...products, ...products];
 
-  // Calculate card width based on container
+  // Calculate responsive items per slide and card width
   useEffect(() => {
-    const updateCardWidth = () => {
+    const updateResponsiveSettings = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const gap = 24; // gap-6 = 1.5rem = 24px
-        const width = (container.offsetWidth - (itemsPerSlide - 1) * gap) / itemsPerSlide;
+        const containerWidth = container.offsetWidth;
+        
+        // Determine items per slide based on screen size
+        let itemsToShow = itemsPerSlide || 4;
+        if (!itemsPerSlide) {
+          if (containerWidth < 640) {
+            // Mobile: 1 item
+            itemsToShow = 1;
+          } else if (containerWidth < 768) {
+            // Small tablets: 2 items
+            itemsToShow = 2;
+          } else if (containerWidth < 1024) {
+            // Tablets: 3 items
+            itemsToShow = 3;
+          } else {
+            // Desktop: 4 items
+            itemsToShow = 4;
+          }
+        }
+        
+        setResponsiveItemsPerSlide(itemsToShow);
+        
+        // Calculate card width
+        const gap = containerWidth < 640 ? 16 : 24; // Smaller gap on mobile
+        const width = (containerWidth - (itemsToShow - 1) * gap) / itemsToShow;
         setCardWidth(width);
       }
     };
 
-    updateCardWidth();
-    const timeoutId = setTimeout(updateCardWidth, 100); // Delay to ensure container is rendered
-    window.addEventListener("resize", updateCardWidth);
+    updateResponsiveSettings();
+    const timeoutId = setTimeout(updateResponsiveSettings, 100);
+    window.addEventListener("resize", updateResponsiveSettings);
     return () => {
-      window.removeEventListener("resize", updateCardWidth);
+      window.removeEventListener("resize", updateResponsiveSettings);
       clearTimeout(timeoutId);
     };
   }, [itemsPerSlide, products.length]);
 
+  // Get responsive gap based on screen size
+  const getGap = () => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 640 ? 16 : 24;
+    }
+    return 24;
+  };
+
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollContainerRef.current && products.length > 0 && cardWidth > 0) {
-      const gap = 24;
+      const gap = getGap();
       const scrollPosition = products.length * (cardWidth + gap);
       // Use setTimeout to ensure DOM is ready
       setTimeout(() => {
@@ -74,16 +106,16 @@ export default function ProductCarousel({
     if (!scrollContainerRef.current || !isAutoScrolling || cardWidth === 0) return;
     
     const container = scrollContainerRef.current;
-    const gap = 24;
+    const gap = getGap();
     const singleSetWidth = products.length * (cardWidth + gap);
     const scrollLeft = container.scrollLeft;
 
     // If scrolled past the second set, jump back to middle
-    if (scrollLeft >= singleSetWidth * 2) {
+    if (scrollLeft >= singleSetWidth * 2 - 50) {
       container.scrollLeft = singleSetWidth;
     }
     // If scrolled before the first set, jump to middle
-    else if (scrollLeft < singleSetWidth - 10) {
+    else if (scrollLeft < singleSetWidth - 50) {
       container.scrollLeft = singleSetWidth;
     }
   };
@@ -95,7 +127,7 @@ export default function ProductCarousel({
     const interval = setInterval(() => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const gap = 24;
+        const gap = getGap();
         const scrollAmount = cardWidth + gap;
         container.scrollBy({
           left: scrollAmount,
@@ -112,7 +144,7 @@ export default function ProductCarousel({
     setIsAutoScrolling(false);
     
     const container = scrollContainerRef.current;
-    const gap = 24;
+    const gap = getGap();
     const scrollAmount = cardWidth + gap;
     
     container.scrollBy({
@@ -128,7 +160,7 @@ export default function ProductCarousel({
     setIsAutoScrolling(false);
     
     const container = scrollContainerRef.current;
-    const gap = 24;
+    const gap = getGap();
     const scrollAmount = cardWidth + gap;
     
     container.scrollBy({
@@ -141,20 +173,20 @@ export default function ProductCarousel({
 
   if (products.length === 0) {
     return (
-      <div className="mb-12">
-        <div className="mb-6 flex items-center justify-between">
+      <div className="mb-8 sm:mb-12">
+        <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
           <div className="flex items-center gap-2">
-            {icon && <span className="text-2xl">{icon}</span>}
-            <h2 className="text-2xl font-bold text-black">{title}</h2>
+            {icon && <span className="text-xl sm:text-2xl">{icon}</span>}
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black">{title}</h2>
           </div>
           <Link
             href={viewMoreLink}
-            className="inline-flex items-center text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
+            className="inline-flex items-center text-xs sm:text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
           >
             Цааш үзэх →
           </Link>
         </div>
-        <div className="text-center py-8 text-black/50">
+        <div className="text-center py-6 sm:py-8 text-sm sm:text-base text-black/50">
           Бараа олдсонгүй
         </div>
       </div>
@@ -162,15 +194,15 @@ export default function ProductCarousel({
   }
 
   return (
-    <div className="mb-12">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mb-8 sm:mb-12">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
         <div className="flex items-center gap-2">
-          {icon && <span className="text-2xl">{icon}</span>}
-          <h2 className="text-2xl font-bold text-black">{title}</h2>
+          {icon && <span className="text-xl sm:text-2xl">{icon}</span>}
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black">{title}</h2>
         </div>
         <Link
           href={viewMoreLink}
-          className="inline-flex items-center text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
+          className="inline-flex items-center text-xs sm:text-sm font-medium text-black/70 hover:text-black transition-all duration-500 ease-out whitespace-nowrap"
         >
           Цааш үзэх →
         </Link>
@@ -179,13 +211,13 @@ export default function ProductCarousel({
       {/* Carousel Container */}
       <div className="relative">
         {/* Left Navigation Button */}
-        {products.length > itemsPerSlide && (
+        {products.length > responsiveItemsPerSlide && (
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-2 transition-all duration-500 ease-out hover:scale-110"
+            className="absolute left-0 sm:left-1 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-1.5 sm:p-2 transition-all duration-500 ease-out hover:scale-110"
             aria-label="Previous products"
           >
-            <ChevronLeft className="h-6 w-6 text-black" />
+            <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 text-black" />
           </button>
         )}
 
@@ -199,12 +231,15 @@ export default function ProductCarousel({
             msOverflowStyle: "none",
           }}
         >
-          <div className="flex gap-6" style={{ width: "max-content" }}>
+          <div 
+            className="flex gap-4 sm:gap-6" 
+            style={{ width: "max-content" }}
+          >
             {duplicatedProducts.map((product, index) => (
               <div
                 key={`${product.id}-${index}`}
                 className="flex-shrink-0"
-                style={{ width: cardWidth > 0 ? `${cardWidth}px` : "300px" }}
+                style={{ width: cardWidth > 0 ? `${cardWidth}px` : "280px" }}
               >
                 <ProductCard {...product} />
               </div>
@@ -213,13 +248,13 @@ export default function ProductCarousel({
         </div>
 
         {/* Right Navigation Button */}
-        {products.length > itemsPerSlide && (
+        {products.length > responsiveItemsPerSlide && (
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-2 transition-all duration-500 ease-out hover:scale-110"
+            className="absolute right-0 sm:right-1 top-1/2 -translate-y-1/2 z-10 bg-[#F3F4F4]/95 hover:bg-[#E0E0E0] border border-black/40 shadow-lg rounded-full p-1.5 sm:p-2 transition-all duration-500 ease-out hover:scale-110"
             aria-label="Next products"
           >
-            <ChevronRight className="h-6 w-6 text-black" />
+            <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 text-black" />
           </button>
         )}
       </div>
