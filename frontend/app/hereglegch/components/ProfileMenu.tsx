@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, User, Package, Heart, Bell, LogOut } from "lucide-react";
+import { X, User, Package, Heart, LogOut } from "lucide-react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import ProductCard from "./ProductCard";
 
@@ -11,11 +11,11 @@ interface ProfileMenuProps {
   onClose: () => void;
 }
 
-type MenuSection = "profile" | "orders" | "favorites" | "notifications";
+type MenuSection = "profile" | "orders" | "favorites";
 
 export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState<MenuSection>("profile");
+  const [activeSection, setActiveSection] = useState<MenuSection | null>(null);
   const [user, setUser] = useState<any>(null);
   const { favorites } = useFavorites();
 
@@ -44,6 +44,11 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isGuest");
+    localStorage.removeItem("favorites");
+    // Dispatch custom event to notify context
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("logout"));
+    }
     onClose();
     window.location.reload();
   };
@@ -66,12 +71,6 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       title: "Зүрхэлсэн",
       icon: <Heart className="h-5 w-5 text-black" />,
       description: "Таны дуртай бараанууд",
-    },
-    {
-      id: "notifications" as MenuSection,
-      title: "Мэдэгдэл",
-      icon: <Bell className="h-5 w-5 text-black" />,
-      description: "Мэдэгдлийн түүх харах",
     },
   ];
 
@@ -131,14 +130,12 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                       router.push("/hereglegch/orders");
                     } else if (item.id === "favorites") {
                       router.push("/hereglegch/favorites");
-                    } else if (item.id === "notifications") {
-                      router.push("/hereglegch/notifications");
                     } else {
                       setActiveSection(item.id);
                     }
                   }}
                   className={`flex items-start gap-4 p-4 rounded-lg transition-all duration-500 ease-out text-left ${
-                    activeSection === item.id
+                    activeSection === item.id && item.id !== "profile"
                       ? "bg-[#E0E0E0] border border-black/20"
                       : "bg-white hover:bg-[#F3F4F4] border border-black/10"
                   }`}
@@ -212,57 +209,6 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                       Зүрхэлсэн бараа байхгүй байна
                     </p>
                   )}
-                </div>
-              )}
-
-              {activeSection === "notifications" && (
-                <div className="bg-white p-6 rounded-lg border border-black/10">
-                  <h3 className="text-lg font-bold text-black mb-4">Мэдэгдэл</h3>
-                  <div className="space-y-3">
-                    {/* Example notifications - replace with actual data */}
-                    <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <p className="font-semibold text-black text-sm mb-1">
-                            Захиалга хүлээн авлаа
-                          </p>
-                          <p className="text-xs text-black/60">
-                            Таны захиалга амжилттай хүлээн авлаа. Бараа 2-3 хоногийн дотор хүргэгдэнэ.
-                          </p>
-                          <p className="text-xs text-black/40 mt-2">2024-01-15 10:30</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <p className="font-semibold text-black text-sm mb-1">
-                            Захиалга илгээгдлээ
-                          </p>
-                          <p className="text-xs text-black/60">
-                            Таны захиалга илгээгдлээ. Хяналтын дугаар: #12345
-                          </p>
-                          <p className="text-xs text-black/40 mt-2">2024-01-14 14:20</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded-r-lg">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <p className="font-semibold text-black text-sm mb-1">
-                            Шинэ бараа нэмэгдлээ
-                          </p>
-                          <p className="text-xs text-black/60">
-                            Таны дуртай ангилалд шинэ бараа нэмэгдлээ. Шалгаж үзээрэй!
-                          </p>
-                          <p className="text-xs text-black/40 mt-2">2024-01-13 09:15</p>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-black/60 text-center py-4 text-sm">
-                      Бүх мэдэгдэл харагдлаа
-                    </p>
-                  </div>
                 </div>
               )}
             </div>

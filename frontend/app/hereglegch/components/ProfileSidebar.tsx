@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { User, Package, Heart, Bell, LogOut } from "lucide-react";
+import { User, Package, Heart, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function ProfileSidebar() {
@@ -26,6 +26,11 @@ export default function ProfileSidebar() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isGuest");
+    localStorage.removeItem("favorites");
+    // Dispatch custom event to notify context
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("logout"));
+    }
     router.push("/hereglegch/home");
   };
 
@@ -47,12 +52,6 @@ export default function ProfileSidebar() {
       title: "Зүрхэлсэн",
       icon: <Heart className="h-5 w-5" />,
       path: "/hereglegch/favorites",
-    },
-    {
-      id: "notifications",
-      title: "Мэдэгдэл",
-      icon: <Bell className="h-5 w-5" />,
-      path: "/hereglegch/notifications",
     },
   ];
 

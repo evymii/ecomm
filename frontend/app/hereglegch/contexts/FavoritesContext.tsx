@@ -23,17 +23,53 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favorites, setFavorites] = useState<Product[]>([]);
 
-  // Load favorites from localStorage on mount
+  // Load favorites from localStorage on mount, but only if user is logged in
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("favorites");
-      if (stored) {
-        try {
-          setFavorites(JSON.parse(stored));
-        } catch (error) {
-          console.error("Error loading favorites:", error);
+      const checkAndLoadFavorites = () => {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        
+        // If user is not logged in, clear favorites
+        if (!token || !user) {
+          localStorage.removeItem("favorites");
+          setFavorites([]);
+          return;
         }
-      }
+        
+        const stored = localStorage.getItem("favorites");
+        if (stored) {
+          try {
+            setFavorites(JSON.parse(stored));
+          } catch (error) {
+            console.error("Error loading favorites:", error);
+          }
+        }
+      };
+      
+      checkAndLoadFavorites();
+      
+      // Listen for storage changes (e.g., when token/user is removed on logout)
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === "token" || e.key === "user") {
+          checkAndLoadFavorites();
+        }
+      };
+      
+      window.addEventListener("storage", handleStorageChange);
+      
+      // Also listen for custom logout event
+      const handleLogout = () => {
+        setFavorites([]);
+        localStorage.removeItem("favorites");
+      };
+      
+      window.addEventListener("logout", handleLogout);
+      
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+        window.removeEventListener("logout", handleLogout);
+      };
     }
   }, []);
 

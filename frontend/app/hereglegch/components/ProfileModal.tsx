@@ -267,7 +267,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
           <div className="border-t border-black/40 p-6 bg-white/50">
             <p className="text-xs text-black/70 text-center">
               Онлайн худалдааг хөгжүүлэгч{" "}
-              <span className="text-purple-600">ZOCHIL</span> платформ.
+              <span className="text-purple-600">MIO</span> платформ.
             </p>
           </div>
         </div>
